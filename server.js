@@ -11,11 +11,11 @@ app.use(express.json());
 app.use(express.static('.'));
 
 const pool = mysql.createPool({
-    host: 'mysql-natalym-a4ee.l.aivencloud.com',
-    port: '10695',
-    user: 'avnadmin',
-    password: 'AVNS_l1FtbTvxG2smtckCwcV',
-    database: 'defaultdb'
+    host: 'sql.freedb.tech',
+    port: '3306',
+    user: 'freedb_confeitaria-sugardreams',
+    password: 'EB&B&h*7NU6uvVR',
+    database: 'freedb_Confeitaria'
 });
 
 
@@ -25,7 +25,7 @@ app.post('/api/mysql', async (req, res) => {
         switch (tipo) {
             case 'cadastro':
                 var [rows, fields] = await pool.query(
-                    "insert into `defaultdb`.`tbl_clientes` (`nome`, `login`, `senha`) values (?, ?, ?);",
+                    "insert into `freedb_Confeitaria`.`tbl_login` (`nome`, `login`, `senha`) values (?, ?, ?);",
                     [nome, login, senha]
                 );
                 if (rows.affectedRows > 0) {
@@ -37,7 +37,7 @@ app.post('/api/mysql', async (req, res) => {
                 case 'login':
                     try {
                         var [rows, fields] = await pool.query(
-                            "select * from `defaultdb`.`tbl_clientes` where `nome` = ? and `login` = ? and `senha` = ?;",
+                            "select * from `freedb_Confeitaria`.`tbl_login` where `nome` = ? and `login` = ? and `senha` = ?;",
                             [nome, login, senha]
                         );
                         if (rows.length >= 1) {
@@ -71,7 +71,7 @@ app.post('/api/mysql', async (req, res) => {
                     addAnd = " and ";
                 }
 
-                var strSql = "select * from `defaultdb`.`tbl_clientes` where" + 
+                var strSql = "select * from `freedb_Confeitaria`.`tbl_login` where" + 
                     addNome + addAnd + addLogin + ";";
                 var [rows, fields] = await pool.query(strSql);
                 if (rows.length > 0) {
@@ -87,7 +87,7 @@ app.post('/api/mysql', async (req, res) => {
                 }
                 break;
                 case 'atualizacao':
-                    var strSql = "select * from `defaultdb`.`tbl_clientes`;";
+                    var strSql = "select * from `freedb_Confeitaria`.`tbl_login`;";
                     var [rows, fields] = await pool.query(strSql);
                     if (rows.length > 0) {
                         res.json({ 
@@ -95,7 +95,7 @@ app.post('/api/mysql', async (req, res) => {
                             rows: rows
                         });
                     } else {
-                        throw ("Não há registro algum na tabela tbl_clientes!");
+                        throw ("Não há registro algum na tabela tbl_login!");
                     }
                     break;
                 case 'atualizar':
@@ -129,7 +129,7 @@ app.post('/api/mysql', async (req, res) => {
                         addSenha = " , " + addSenha;
                     }
     
-                    var strSql = "update `defaultdb`.`tbl_clientes` set " + 
+                    var strSql = "update `freedb_Confeitaria`.`tbl_login` set " + 
                         addNome + addLogin + addSenha + 
                         " where `id` = " + addId + ";";
                     var [rows, fields] = await pool.query(strSql);
@@ -138,7 +138,7 @@ app.post('/api/mysql', async (req, res) => {
                             message: 'Registro atualizado com sucesso!'
                         });
                     } else {
-                        throw ("Não foi possível atualizar o id: " + addId + " na tabela tbl_clientes!");
+                        throw ("Não foi possível atualizar o id: " + addId + " na tabela tbl_login!");
                     }
                     break;
             default:
